@@ -7,7 +7,7 @@ view: neighborhoods_zip {
     link: {
       label: "Neighborhood Breakdown"
 #       url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}"
-      url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}&f[bars.day_of_week]=={{ _filters['bars.day_of_week'] | url_encode }}"
+      url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}&Day%20of%20Week={{ _filters['bars.day_of_week'] | url_encode }}"
       }
 
   }
