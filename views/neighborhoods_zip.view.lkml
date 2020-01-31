@@ -6,7 +6,8 @@ view: neighborhoods_zip {
     sql: ${TABLE}.neighborhoods ;;
     link: {
       label: "Neighborhood Breakdown"
-      url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}"
+#       url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}"
+      url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}&Day_of_week={{ _filters['bars.day_of_week'] | url_encode }}"
       }
 
   }
