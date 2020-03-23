@@ -1,10 +1,7 @@
 view: bars {
   sql_table_name: bars1.bars ;;
 
-  dimension: bar_attire {
-    type: string
-    sql: ${TABLE}.bar_attire ;;
-  }
+
 
   parameter: day_of_week {
     allowed_value: {
@@ -77,60 +74,60 @@ view: bars {
   dimension: Monday {
     type: string
     group_label: "Day of Week"
-    sql: bars.bar_bestnights_1='Mon' OR bars.bar_bestnights_2='Mon' OR bars.bar_bestnights_3='Mon';;
+    sql: if(${TABLE}.bar_bestnights_1 ='Mon' OR ${TABLE}.bar_bestnights_2='Mon' OR ${TABLE}.bar_bestnights_3='Mon', 'Mon', null) ;;
   }
 
   dimension: Tuesday {
     type: string
     group_label: "Day of Week"
-    sql: bars.bar_bestnights_1='Tue' OR bars.bar_bestnights_2='Tue' OR bars.bar_bestnights_3='Tue';;
+    sql: if(${TABLE}.bar_bestnights_1='Tue' OR ${TABLE}.bar_bestnights_2='Tue' OR ${TABLE}.bar_bestnights_3='Tue', 'Tue', null);;
   }
 
   dimension: Wednesday {
     type: string
     group_label: "Day of Week"
-    sql: contains(${bars.bar_bestnights_1},"Wed") OR contains(${bars.bar_bestnights_2},"Wed") OR contains(${bars.bar_bestnights_3},"Wed");;
+    sql: if(${TABLE}.bar_bestnights_1='Wed' OR ${TABLE}.bar_bestnights_2='Wed' OR ${TABLE}.bar_bestnights_3='Wed', 'Wed', null);;
   }
 
   dimension: Thursday {
     type: string
     group_label: "Day of Week"
-    sql: contains(${bars.bar_bestnights_1},"Thu") OR contains(${bars.bar_bestnights_2},"Thu") OR contains(${bars.bar_bestnights_3},"Thu");;
+    sql:if(${TABLE}.bar_bestnights_1='Thu' OR ${TABLE}.bar_bestnights_2='Thu' OR ${TABLE}.bar_bestnights_3='Thu', 'Thu', null);;
   }
 
   dimension: Friday {
     type: string
     group_label: "Day of Week"
-    sql: contains(${bars.bar_bestnights_1},"Fri") OR contains(${bars.bar_bestnights_2},"Fri") OR contains(${bars.bar_bestnights_3},"Fri");;
+    sql: if(${TABLE}.bar_bestnights_1='Fri' OR ${TABLE}.bar_bestnights_2='Fri' OR ${TABLE}.bar_bestnights_3='Fri', 'Fri', null);;
   }
 
   dimension: Saturday {
     type: string
     group_label: "Day of Week"
-    sql: contains(${bars.bar_bestnights_1},"Sat") OR contains(${bars.bar_bestnights_2},"Sat") OR contains(${bars.bar_bestnights_3},"Sat");;
+    sql:if(${TABLE}.bar_bestnights_1='Sat' OR ${TABLE}.bar_bestnights_2='Sat' OR ${TABLE}.bar_bestnights_3='Sat', 'Sat', null);;
   }
 
   dimension: Sunday {
     type: string
     group_label: "Day of Week"
-    sql: contains(${bars.bar_bestnights_1},"Sun") OR contains(${bars.bar_bestnights_2},"Sun") OR contains(${bars.bar_bestnights_3},"Sun");;
+    sql:if(${TABLE}.bar_bestnights_1='Sun' OR ${TABLE}.bar_bestnights_2='Sun' OR ${TABLE}.bar_bestnights_3='Sun', 'Sun', null);;
   }
 
   dimension: bar_dancing {
     type: string
     label: "Dancing"
     sql: ${TABLE}.bar_dancing ;;
+    link: {
+      label: "Bars by Dancing"
+      url: "/looks/49?&f[bars.bar_dancing]={{value}}"
+    }
     html:
     {% if value == 'Yes' %}
         <p style="color: green; font-size:100%; text-align:center">{{ value }}</p>
     {% elsif value == 'No' %}
         <p style="color: red; font-size:100%; text-align:center">{{ value }}</p>
-        {% elsif value == 'N/A' %}
-        <p style="color: black; font-size:100%; text-align:center">{{ value }}</p>
-          {% endif %}
-
-
-;;
+        {% elsif value == 'N/A' %} </p>
+          {% endif %};;
   }
 
   dimension: bar_category {
@@ -189,7 +186,15 @@ view: bars {
 #       value: "Yes"
 #     }
 #   }
-
+  dimension: bar_attire {
+    type: string
+    sql: ${TABLE}.bar_attire ;;
+    html:{% if value == '' %} {{null }}{% endif %};;
+    link: {
+      label: "Bars by Attire"
+      url: "/looks/47?&f[bars.bar_attire]={{value}}"
+    }
+  }
 
     dimension: bar_name {
       type: string
@@ -198,6 +203,11 @@ view: bars {
       link: {
         label: "Individual Bar"
         url: "https://localhost:9999/dashboards/9?Bar%20Name={{value}}"
+      }
+      link: {
+        label: "Yelp"
+        url: "https://www.yelp.com/search?find_desc={{value}}&find_loc=New%20York"
+        icon_url: "https://www.yelp.com/favicon.ico"
       }
     }
 
@@ -259,13 +269,19 @@ view: bars {
       {% endif %} ;;
     }
 
+  dimension: bar_reservations2 {
+    type: string
+    label: "Reservations2"
+    sql: ${TABLE}.bar_reservations ;;
+    }
+
     dimension: bar_tv {
       type: string
       label: "TV"
       sql: ${TABLE}.bar_tv ;;
       link: {
         label: "Bars by TV"
-        url: "/looks/42?&f[bars.bar_tv]={{value}}"
+        url: "/looks/50?&f[bars.bar_tv]={{value}}"
       }
       html: {% if value == 'Yes' %}
       <p style="color: green; font-size:100%; text-align:center">{{ value }}</p>
@@ -273,6 +289,8 @@ view: bars {
       <p style="color: red; font-size:100%; text-align:center">{{ value }}</p>
       {% elsif value == 'N/A' %}
       <p style="color: black; font-size:100%; text-align:center">{{ value }}</p>
+       {% elsif value == '' %}
+       <p style="color: black; font-size:100%; text-align:center">{{ value }}</p>
       {% endif %} ;;
     }
 
@@ -320,6 +338,10 @@ view: bars {
     dimension: num_stars {
       type: number
       sql: ${TABLE}.num_stars ;;
+      link: {
+        label: "Bars by Star Rating"
+        url: "/looks/48?&f[bars.num_stars]={{value}}"
+      }
     }
 
     measure: star {
@@ -362,6 +384,7 @@ view: bars {
     }
 
     dimension: price {
+      hidden: yes
       case: {
         when: {
           sql: ${TABLE}.price_range = "$" ;;
@@ -386,5 +409,29 @@ view: bars {
     measure: count {
       type: count
       drill_fields: [bar_name]
+    }
+
+    measure: count_bar {
+      type: count_distinct
+      sql: COALESCE(${bar_name},0) ;;
+    }
+
+
+  measure: count_html {
+    type: count
+  html: <div style="float: left
+  ; width:{{ value }}
+  ; background-color: rgba(180,0,0,{{ value}})
+  ; text-align:left
+  ; color: #FFFFFF
+  ; border-radius: 5px"> <p style="margin-bottom: 0; margin-left: 4px;">{{ value }}</p>
+  </div>
+  <div style="float: left
+  ; width:{{ 1| minus:value}}
+  ; background-color: rgba(0,180,0,0.1)
+  ; text-align:right
+  ; border-radius: 5px"> <p style="margin-bottom: 0; margin-left: 0px; color:rgba(0,0,0,0.0" )>{{value}}</p>
+  </div>
+  ;;
     }
   }

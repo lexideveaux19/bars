@@ -5,10 +5,13 @@ view: neighborhoods_zip {
     type: string
     sql: ${TABLE}.neighborhoods ;;
     link: {
-      label: "Neighborhood Breakdown"
-#       url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}"
-      url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}&Day%20of%20Week={{ _filters['bars.day_of_week'] | url_encode }}"
+      label: "Neighborhood Breakdown by DoW"
+       url: "https://localhost:9999/dashboards/8?Neighborhood={{value}}&Day%20of%20Week={{ _filters['bars.day_of_week'] | url_encode }}"
       }
+    link: {
+      label: "Neighborhood Breakdown"
+      url: "https://localhost:9999/dashboards/11?Neighborhood={{value}}"
+    }
 
   }
 
@@ -22,23 +25,23 @@ view: neighborhoods_zip {
     drill_fields: []
   }
 
-
-  filter: neighborhood_filter {
-    suggest_dimension: neighborhood
-  }
-
-  dimension: is_neighborhood {
-    type: yesno
-    sql: ${neighborhood} = {% parameter neighborhood_filter %} ;;
-  }
-
-  measure: bars_count_by_neighborhood {
-    type: count
-    filters: {
-      field: is_neighborhood
-      value: "Yes"
-    }
-  }
+#
+#   filter: neighborhood_filter {
+#     suggest_dimension: neighborhood
+#   }
+#
+#   dimension: is_neighborhood {
+#     type: yesno
+#     sql: ${neighborhood} = {% parameter neighborhood_filter %} ;;
+#   }
+#
+#   measure: bars_count_by_neighborhood {
+#     type: count
+#     filters: {
+#       field: is_neighborhood
+#       value: "Yes"
+#     }
+#   }
 
 
 

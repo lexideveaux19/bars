@@ -15,6 +15,7 @@ view: agg_income_dt {
       ORDER BY 2 DESC
       LIMIT 500
        ;;
+    persist_for: "78 hours"
   }
 
   measure: count {
@@ -44,4 +45,5 @@ view: agg_income_dt {
   set: detail {
     fields: [map_block_group, aggregate_income, avg_income]
   }
+
 }

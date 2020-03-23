@@ -40,8 +40,11 @@ explore: bars {
      sql_on: ${fast_facts.block_group} = ${block_group_facts.logrecno_bg_map_block_group};;
     relationship: one_to_one
    }
+
 #   join: agg_income_dt {
 #     sql_on: ${fast_facts.block_group} = ${agg_income_dt.map_block_group} ;;
 #     relationship: one_to_one
 #   }
+
+persist_for: "24 hours"
 }
