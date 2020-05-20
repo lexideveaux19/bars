@@ -13,6 +13,7 @@ datagroup: lexi_thesis_default_datagroup {
 persist_with: lexi_thesis_default_datagroup
 
 explore: total_facts {}
+explore: testing_pdt {}
 explore: bars {
 #   join: median_income {
 #     relationship: one_to_one

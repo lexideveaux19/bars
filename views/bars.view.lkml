@@ -130,6 +130,7 @@ view: bars {
           {% endif %};;
   }
 
+
   dimension: bar_category {
     type: string
     label: "Category"
@@ -202,7 +203,7 @@ view: bars {
       sql: ${TABLE}.bar_name ;;
       link: {
         label: "Individual Bar"
-        url: "https://localhost:9999/dashboards/9?Bar%20Name={{value}}"
+        url: "https://localhost:9999/dashboards/9?Bar%20Name={{value}}&Bar%20category={{bars.bar_category._value| url_encode }}"
       }
       link: {
         label: "Yelp"
@@ -219,7 +220,7 @@ view: bars {
         label: "Bars by Outdoor Space"
         url: "/looks/41?&f[bars.bar_outdoor]={{value}}"
       }
-      html: {% if value == 'Yes' %}
+      html: {% if value == 'Yes'%}
         <p style="color: green; font-size:100%; text-align:center">{{ value }}</p>
     {% elsif value == 'No' %}
         <p style="color: red; font-size:100%; text-align:center">{{ value }}</p>
@@ -293,6 +294,23 @@ view: bars {
        <p style="color: black; font-size:100%; text-align:center">{{ value }}</p>
       {% endif %} ;;
     }
+
+    dimension: bar_tv_number {
+      type: number
+      sql: case when ${bar_tv}='Yes' THEN 1 WHEN ${bar_tv}='No' THEN 0 ELSE NULL END ;;
+    }
+
+  dimension: test_1 {
+    type: number
+    sql: CASE WHEN IFNULL(${bar_tv_number},0) != 1
+      THEN 22 ELSE 0 END;;
+  }
+
+  dimension: test_1_nn {
+    type: number
+    sql: CASE WHEN ${bar_tv_number} != 0
+      THEN 22 ELSE 0 END;;
+  }
 
     dimension: bar_wheelchair {
       type: string
@@ -411,11 +429,33 @@ view: bars {
       drill_fields: [bar_name]
     }
 
-    measure: count_bar {
-      type: count_distinct
-      sql: COALESCE(${bar_name},0) ;;
-    }
 
+  parameter: field_picker {
+    description: "Use with the Sale Price Metric measure"
+    type: unquoted
+    allowed_value: {
+      label: "$"
+      value: "$"
+    }
+    allowed_value: {
+      label: "$$"
+      value: "$$"
+    }
+    allowed_value: {
+      label: "$$$"
+      value: "$$$"
+    }
+    allowed_value: {
+      label: "$$$$"
+      value: "$$$$"
+    }
+  }
+
+  measure: dynamic_agg {
+    type: number
+    label_from_parameter: field_picker
+    sql: count( {% parameter bars.field_picker %});;
+  }
 
   measure: count_html {
     type: count
