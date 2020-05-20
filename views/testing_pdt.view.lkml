@@ -10,7 +10,7 @@ view: testing_pdt {
       ORDER BY 3 DESC
       LIMIT 20
        ;;
-    sql_trigger_value: SELECT DATE_PART('hour', NOW()) ;;
+    sql_trigger_value:SELECT FLOOR(UNIX_TIMESTAMP() / (15*60)) ;;
 
   }
 
